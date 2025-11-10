@@ -1,3 +1,3 @@
 name = 'Deep Live Cam'
-version = '1.6.0'
+version = '2.0c'
 edition = 'Portable'
