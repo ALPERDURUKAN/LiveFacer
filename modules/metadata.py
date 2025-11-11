@@ -1,3 +1,3 @@
 name = 'LiveFacer'
-version = '2.0c'
+version = '1.0b'
 edition = 'GitHub Edition'
