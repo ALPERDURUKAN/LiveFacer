@@ -646,7 +646,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
 
     donate_label = ctk.CTkLabel(
         content, 
-        text="Deep Live Cam", 
+        text="LiveFacer", 
         justify="center", 
         cursor="hand2",
         font=ctk.CTkFont(size=16, weight="normal")
@@ -656,7 +656,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         text_color=ctk.ThemeManager.theme.get("URL").get("text_color")
     )
     donate_label.bind(
-        "<Button>", lambda event: webbrowser.open("https://paypal.me/hacksider")
+        "<Button>", lambda event: webbrowser.open(modules.metadata.website)
     )
 
     status_label = ctk.CTkLabel(

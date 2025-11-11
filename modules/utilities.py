@@ -138,4 +138,6 @@ def conditional_download(download_directory_path: str, urls: List[str]) -> None:
 
 
 def resolve_relative_path(path: str) -> str:
+    # PyInstaller preserves __file__ path structure, so relative paths work the same way
+    # whether running as script or executable
     return os.path.abspath(os.path.join(os.path.dirname(__file__), path))
