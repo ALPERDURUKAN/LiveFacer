@@ -1,3 +1,3 @@
-name = 'Deep-Live-Cam'
+name = 'LiveFacer'
 version = '2.0c'
 edition = 'GitHub Edition'
