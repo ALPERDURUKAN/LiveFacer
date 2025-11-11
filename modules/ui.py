@@ -31,8 +31,8 @@ from modules.utilities import (
 ROOT = None
 POPUP = None
 POPUP_LIVE = None
-ROOT_HEIGHT = 750
-ROOT_WIDTH = 600
+ROOT_HEIGHT = 850
+ROOT_WIDTH = 680
 
 PREVIEW = None
 PREVIEW_MAX_HEIGHT = 700
@@ -162,40 +162,75 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     root.grid_columnconfigure(0, weight=1)
 
     content = ctk.CTkFrame(root, fg_color="transparent")
-    content.grid(row=0, column=0, sticky="nsew", padx=24, pady=(24, 12))
+    content.grid(row=0, column=0, sticky="nsew", padx=32, pady=(32, 16))
     content.grid_columnconfigure(0, weight=1)
     content.grid_rowconfigure(2, weight=1)
 
     face_preview_frame = ctk.CTkFrame(content, fg_color="transparent")
-    face_preview_frame.grid(row=0, column=0, sticky="ew")
+    face_preview_frame.grid(row=0, column=0, sticky="ew", pady=(0, 8))
     face_preview_frame.grid_columnconfigure(0, weight=1)
     face_preview_frame.grid_columnconfigure(1, weight=0)
     face_preview_frame.grid_columnconfigure(2, weight=1)
 
-    source_label = ctk.CTkLabel(face_preview_frame, text=None, width=200, height=200)
-    source_label.grid(row=0, column=0, sticky="nsew", padx=(0, 24))
+    # Enhanced image preview containers with glassmorphism
+    source_container = ctk.CTkFrame(face_preview_frame, corner_radius=16, border_width=1)
+    source_container.grid(row=0, column=0, sticky="nsew", padx=(0, 16))
+    source_container.grid_columnconfigure(0, weight=1)
+    source_container.grid_rowconfigure(0, weight=1)
+    
+    source_label = ctk.CTkLabel(
+        source_container, 
+        text=None, 
+        width=220, 
+        height=220,
+        corner_radius=12,
+        fg_color="transparent"
+    )
+    source_label.grid(row=0, column=0, sticky="nsew", padx=8, pady=8)
 
     swap_icon = ctk.CTkLabel(
         face_preview_frame,
         text="↔",
-        font=ctk.CTkFont(size=32, weight="bold"),
+        font=ctk.CTkFont(size=36, weight="bold"),
+        text_color="#FFB84D"
     )
-    swap_icon.grid(row=0, column=1, padx=6)
+    swap_icon.grid(row=0, column=1, padx=8)
 
-    target_label = ctk.CTkLabel(face_preview_frame, text=None, width=200, height=200)
-    target_label.grid(row=0, column=2, sticky="nsew", padx=(24, 0))
+    target_container = ctk.CTkFrame(face_preview_frame, corner_radius=16, border_width=1)
+    target_container.grid(row=0, column=2, sticky="nsew", padx=(16, 0))
+    target_container.grid_columnconfigure(0, weight=1)
+    target_container.grid_rowconfigure(0, weight=1)
+    
+    target_label = ctk.CTkLabel(
+        target_container, 
+        text=None, 
+        width=220, 
+        height=220,
+        corner_radius=12,
+        fg_color="transparent"
+    )
+    target_label.grid(row=0, column=0, sticky="nsew", padx=8, pady=8)
 
     button_frame = ctk.CTkFrame(content, fg_color="transparent")
-    button_frame.grid(row=1, column=0, sticky="ew", pady=(12, 18))
+    button_frame.grid(row=1, column=0, sticky="ew", pady=(16, 24))
     button_frame.grid_columnconfigure((0, 1, 2), weight=1, uniform="face-buttons")
 
     select_face_button = ctk.CTkButton(
-        button_frame, text="Select a face", cursor="hand2", command=select_source_path
+        button_frame, 
+        text="Select a face", 
+        cursor="hand2", 
+        command=select_source_path,
+        font=ctk.CTkFont(size=15, weight="normal")
     )
     select_face_button.grid(row=0, column=0, sticky="ew", padx=(0, 12))
 
     swap_faces_button = ctk.CTkButton(
-        button_frame, text="↔", cursor="hand2", command=swap_faces_paths, width=48
+        button_frame, 
+        text="↔", 
+        cursor="hand2", 
+        command=swap_faces_paths, 
+        width=56,
+        font=ctk.CTkFont(size=20, weight="bold")
     )
     swap_faces_button.grid(row=0, column=1, sticky="ew", padx=12)
 
@@ -204,11 +239,12 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         text="Select a target",
         cursor="hand2",
         command=select_target_path,
+        font=ctk.CTkFont(size=15, weight="normal")
     )
     select_target_button.grid(row=0, column=2, sticky="ew", padx=(12, 0))
 
-    switch_frame = ctk.CTkFrame(content)
-    switch_frame.grid(row=2, column=0, sticky="ew", pady=(0, 18))
+    switch_frame = ctk.CTkFrame(content, corner_radius=16)
+    switch_frame.grid(row=2, column=0, sticky="ew", pady=(0, 24))
     switch_frame.grid_columnconfigure((0, 1), weight=1, uniform="switch-columns")
 
     eyebrows_mask_var = ctk.BooleanVar(value=modules.globals.eyebrows_mask)
@@ -222,7 +258,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    eyebrows_mask_switch.grid(row=0, column=0, sticky="w", padx=(18, 12), pady=6)
+    eyebrows_mask_switch.grid(row=0, column=0, sticky="w", padx=(24, 16), pady=8)
 
     eyes_mask_var = ctk.BooleanVar(value=modules.globals.eyes_mask)
     eyes_mask_switch = ctk.CTkSwitch(
@@ -235,7 +271,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    eyes_mask_switch.grid(row=1, column=0, sticky="w", padx=(18, 12), pady=6)
+    eyes_mask_switch.grid(row=1, column=0, sticky="w", padx=(24, 16), pady=8)
 
     mouth_mask_var = ctk.BooleanVar(value=modules.globals.mouth_mask)
     mouth_mask_switch = ctk.CTkSwitch(
@@ -248,7 +284,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    mouth_mask_switch.grid(row=2, column=0, sticky="w", padx=(18, 12), pady=6)
+    mouth_mask_switch.grid(row=2, column=0, sticky="w", padx=(24, 16), pady=8)
 
     keep_fps_value = ctk.BooleanVar(value=modules.globals.keep_fps)
     keep_fps_switch = ctk.CTkSwitch(
@@ -261,7 +297,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    keep_fps_switch.grid(row=3, column=0, sticky="w", padx=(18, 12), pady=6)
+    keep_fps_switch.grid(row=3, column=0, sticky="w", padx=(24, 16), pady=8)
 
     keep_frames_value = ctk.BooleanVar(value=modules.globals.keep_frames)
     keep_frames_switch = ctk.CTkSwitch(
@@ -274,7 +310,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    keep_frames_switch.grid(row=4, column=0, sticky="w", padx=(18, 12), pady=6)
+    keep_frames_switch.grid(row=4, column=0, sticky="w", padx=(24, 16), pady=8)
 
     enhancer_value = ctk.BooleanVar(value=modules.globals.fp_ui["face_enhancer"])
     enhancer_switch = ctk.CTkSwitch(
@@ -287,7 +323,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    enhancer_switch.grid(row=5, column=0, sticky="w", padx=(18, 12), pady=6)
+    enhancer_switch.grid(row=5, column=0, sticky="w", padx=(24, 16), pady=8)
 
     map_faces_var = ctk.BooleanVar(value=modules.globals.map_faces)
     map_faces_switch = ctk.CTkSwitch(
@@ -300,7 +336,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    map_faces_switch.grid(row=6, column=0, sticky="w", padx=(18, 12), pady=6)
+    map_faces_switch.grid(row=6, column=0, sticky="w", padx=(24, 16), pady=8)
 
     show_eyebrows_mask_box_var = ctk.BooleanVar(
         value=modules.globals.show_eyebrows_mask_box
@@ -319,7 +355,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    show_eyebrows_mask_box_switch.grid(row=0, column=1, sticky="w", padx=(12, 18), pady=6)
+    show_eyebrows_mask_box_switch.grid(row=0, column=1, sticky="w", padx=(16, 24), pady=8)
 
     show_eyes_mask_box_var = ctk.BooleanVar(value=modules.globals.show_eyes_mask_box)
     show_eyes_mask_box_switch = ctk.CTkSwitch(
@@ -334,7 +370,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    show_eyes_mask_box_switch.grid(row=1, column=1, sticky="w", padx=(12, 18), pady=6)
+    show_eyes_mask_box_switch.grid(row=1, column=1, sticky="w", padx=(16, 24), pady=8)
 
     show_mouth_mask_box_var = ctk.BooleanVar(
         value=modules.globals.show_mouth_mask_box
@@ -353,7 +389,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    show_mouth_mask_box_switch.grid(row=2, column=1, sticky="w", padx=(12, 18), pady=6)
+    show_mouth_mask_box_switch.grid(row=2, column=1, sticky="w", padx=(16, 24), pady=8)
 
     keep_audio_value = ctk.BooleanVar(value=modules.globals.keep_audio)
     keep_audio_switch = ctk.CTkSwitch(
@@ -366,7 +402,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    keep_audio_switch.grid(row=3, column=1, sticky="w", padx=(12, 18), pady=6)
+    keep_audio_switch.grid(row=3, column=1, sticky="w", padx=(16, 24), pady=8)
 
     many_faces_value = ctk.BooleanVar(value=modules.globals.many_faces)
     many_faces_switch = ctk.CTkSwitch(
@@ -379,7 +415,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    many_faces_switch.grid(row=4, column=1, sticky="w", padx=(12, 18), pady=6)
+    many_faces_switch.grid(row=4, column=1, sticky="w", padx=(16, 24), pady=8)
 
     color_correction_value = ctk.BooleanVar(value=modules.globals.color_correction)
     color_correction_switch = ctk.CTkSwitch(
@@ -394,7 +430,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    color_correction_switch.grid(row=5, column=1, sticky="w", padx=(12, 18), pady=6)
+    color_correction_switch.grid(row=5, column=1, sticky="w", padx=(16, 24), pady=8)
 
     show_fps_value = ctk.BooleanVar(value=modules.globals.show_fps)
     show_fps_switch = ctk.CTkSwitch(
@@ -407,14 +443,14 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states(),
         ),
     )
-    show_fps_switch.grid(row=6, column=1, sticky="w", padx=(12, 18), pady=6)
+    show_fps_switch.grid(row=6, column=1, sticky="w", padx=(16, 24), pady=8)
 
     slider_frame = ctk.CTkFrame(content, fg_color="transparent")
-    slider_frame.grid(row=3, column=0, sticky="ew", pady=(0, 18))
+    slider_frame.grid(row=3, column=0, sticky="ew", pady=(0, 24))
     slider_frame.grid_columnconfigure((0, 1), weight=1, uniform="sliders")
 
     sharpness_container = ctk.CTkFrame(slider_frame, fg_color="transparent")
-    sharpness_container.grid(row=0, column=0, sticky="ew", padx=(0, 12))
+    sharpness_container.grid(row=0, column=0, sticky="ew", padx=(0, 16))
     sharpness_container.grid_columnconfigure(0, weight=1)
 
     sharpness_var = ctk.DoubleVar(value=modules.globals.sharpness)
@@ -428,8 +464,9 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     sharpness_label = ctk.CTkLabel(
         sharpness_container,
         text=f"Sharpness: {int(modules.globals.sharpness * 100)}%",
+        font=ctk.CTkFont(size=15, weight="normal")
     )
-    sharpness_label.grid(row=0, column=0, sticky="w")
+    sharpness_label.grid(row=0, column=0, sticky="w", pady=(0, 4))
 
     sharpness_slider = ctk.CTkSlider(
         sharpness_container,
@@ -438,10 +475,10 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         variable=sharpness_var,
         command=on_sharpness_change,
     )
-    sharpness_slider.grid(row=1, column=0, sticky="ew", pady=(6, 0))
+    sharpness_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 
     transparency_container = ctk.CTkFrame(slider_frame, fg_color="transparent")
-    transparency_container.grid(row=0, column=1, sticky="ew", padx=(12, 0))
+    transparency_container.grid(row=0, column=1, sticky="ew", padx=(16, 0))
     transparency_container.grid_columnconfigure(0, weight=1)
 
     transparency_var = ctk.DoubleVar(value=modules.globals.opacity)
@@ -455,8 +492,9 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     transparency_label = ctk.CTkLabel(
         transparency_container,
         text=f"Transparency: {int(modules.globals.opacity * 100)}%",
+        font=ctk.CTkFont(size=15, weight="normal")
     )
-    transparency_label.grid(row=0, column=0, sticky="w")
+    transparency_label.grid(row=0, column=0, sticky="w", pady=(0, 4))
 
     transparency_slider = ctk.CTkSlider(
         transparency_container,
@@ -465,15 +503,19 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         variable=transparency_var,
         command=on_transparency_change,
     )
-    transparency_slider.grid(row=1, column=0, sticky="ew", pady=(6, 0))
+    transparency_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 
     camera_frame = ctk.CTkFrame(content, fg_color="transparent")
-    camera_frame.grid(row=4, column=0, sticky="ew", pady=(0, 18))
+    camera_frame.grid(row=4, column=0, sticky="ew", pady=(0, 24))
     camera_frame.grid_columnconfigure(1, weight=1)
     camera_frame.grid_columnconfigure(3, weight=1)
 
-    camera_label = ctk.CTkLabel(camera_frame, text="Select Camera:")
-    camera_label.grid(row=0, column=0, sticky="w", padx=(0, 12))
+    camera_label = ctk.CTkLabel(
+        camera_frame, 
+        text="Select Camera:",
+        font=ctk.CTkFont(size=15, weight="normal")
+    )
+    camera_label.grid(row=0, column=0, sticky="w", padx=(0, 16))
 
     available_camera_indices, available_camera_strings = get_available_cameras()
     camera_values = (
@@ -483,7 +525,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     camera_optionmenu = ctk.CTkOptionMenu(
         camera_frame, variable=camera_variable, values=camera_values, width=200
     )
-    camera_optionmenu.grid(row=0, column=1, sticky="ew")
+    camera_optionmenu.grid(row=0, column=1, sticky="ew", padx=(0, 16))
 
     def on_live_click():
         if not available_camera_strings:
@@ -504,11 +546,15 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         state="normal" if available_camera_strings else "disabled",
         command=on_live_click,
     )
-    live_button.grid(row=0, column=2, padx=(12, 0))
+    live_button.grid(row=0, column=2, padx=(16, 0))
 
     # Live Resolution Controls
-    resolution_label = ctk.CTkLabel(camera_frame, text="Live Resolution:")
-    resolution_label.grid(row=1, column=0, sticky="w", padx=(0, 12), pady=(12, 0))
+    resolution_label = ctk.CTkLabel(
+        camera_frame, 
+        text="Live Resolution:",
+        font=ctk.CTkFont(size=15, weight="normal")
+    )
+    resolution_label.grid(row=1, column=0, sticky="w", padx=(0, 16), pady=(16, 0))
 
     def validate_resolution(value):
         try:
@@ -527,8 +573,12 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             modules.globals.live_height = int(value)
             save_switch_states()
 
-    width_label = ctk.CTkLabel(camera_frame, text="Width:")
-    width_label.grid(row=1, column=1, sticky="w", padx=(0, 6), pady=(12, 0))
+    width_label = ctk.CTkLabel(
+        camera_frame, 
+        text="Width:",
+        font=ctk.CTkFont(size=14, weight="normal")
+    )
+    width_label.grid(row=1, column=1, sticky="w", padx=(0, 8), pady=(16, 0))
 
     width_entry = ctk.CTkEntry(
         camera_frame,
@@ -536,12 +586,16 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         placeholder_text=str(modules.globals.live_width)
     )
     width_entry.insert(0, str(modules.globals.live_width))
-    width_entry.grid(row=1, column=2, padx=(0, 12), pady=(12, 0), sticky="w")
+    width_entry.grid(row=1, column=2, padx=(0, 16), pady=(16, 0), sticky="w")
     width_entry.bind("<Return>", lambda e: on_width_change(width_entry.get()))
     width_entry.bind("<FocusOut>", lambda e: on_width_change(width_entry.get()))
 
-    height_label = ctk.CTkLabel(camera_frame, text="Height:")
-    height_label.grid(row=1, column=3, sticky="w", padx=(0, 6), pady=(12, 0))
+    height_label = ctk.CTkLabel(
+        camera_frame, 
+        text="Height:",
+        font=ctk.CTkFont(size=14, weight="normal")
+    )
+    height_label.grid(row=1, column=3, sticky="w", padx=(0, 8), pady=(16, 0))
 
     height_entry = ctk.CTkEntry(
         camera_frame,
@@ -549,12 +603,12 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         placeholder_text=str(modules.globals.live_height)
     )
     height_entry.insert(0, str(modules.globals.live_height))
-    height_entry.grid(row=1, column=4, padx=(0, 0), pady=(12, 0), sticky="w")
+    height_entry.grid(row=1, column=4, padx=(0, 0), pady=(16, 0), sticky="w")
     height_entry.bind("<Return>", lambda e: on_height_change(height_entry.get()))
     height_entry.bind("<FocusOut>", lambda e: on_height_change(height_entry.get()))
 
     action_frame = ctk.CTkFrame(content, fg_color="transparent")
-    action_frame.grid(row=5, column=0, sticky="ew", pady=(18, 0))
+    action_frame.grid(row=5, column=0, sticky="ew", pady=(24, 0))
     action_frame.grid_columnconfigure((0, 1, 2), weight=1, uniform="action-buttons")
 
     start_button = ctk.CTkButton(
@@ -562,23 +616,42 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         text="Start",
         cursor="hand2",
         command=lambda: analyze_target(start, root),
+        font=ctk.CTkFont(size=16, weight="bold"),
+        fg_color="#6366F1",
+        hover_color="#8B5CF6"
     )
     start_button.grid(row=0, column=0, sticky="ew", padx=(0, 12))
 
     stop_button = ctk.CTkButton(
-        action_frame, text="Destroy", cursor="hand2", command=destroy
+        action_frame, 
+        text="Destroy", 
+        cursor="hand2", 
+        command=destroy,
+        font=ctk.CTkFont(size=15, weight="normal"),
+        fg_color="#4A4D50",
+        hover_color="#6E7174"
     )
     stop_button.grid(row=0, column=1, sticky="ew", padx=12)
 
     preview_button = ctk.CTkButton(
-        action_frame, text="Preview", cursor="hand2", command=toggle_preview
+        action_frame, 
+        text="Preview", 
+        cursor="hand2", 
+        command=toggle_preview,
+        font=ctk.CTkFont(size=15, weight="normal"),
+        fg_color="#6366F1",
+        hover_color="#8B5CF6"
     )
     preview_button.grid(row=0, column=2, sticky="ew", padx=(12, 0))
 
     donate_label = ctk.CTkLabel(
-        content, text="Deep Live Cam", justify="center", cursor="hand2"
+        content, 
+        text="Deep Live Cam", 
+        justify="center", 
+        cursor="hand2",
+        font=ctk.CTkFont(size=16, weight="normal")
     )
-    donate_label.grid(row=6, column=0, sticky="ew", pady=(12, 0))
+    donate_label.grid(row=6, column=0, sticky="ew", pady=(16, 0))
     donate_label.configure(
         text_color=ctk.ThemeManager.theme.get("URL").get("text_color")
     )
@@ -586,8 +659,13 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         "<Button>", lambda event: webbrowser.open("https://paypal.me/hacksider")
     )
 
-    status_label = ctk.CTkLabel(content, text=None, justify="center")
-    status_label.grid(row=7, column=0, sticky="ew", pady=(4, 0))
+    status_label = ctk.CTkLabel(
+        content, 
+        text=None, 
+        justify="center",
+        font=ctk.CTkFont(size=14, weight="normal")
+    )
+    status_label.grid(row=7, column=0, sticky="ew", pady=(8, 0))
 
     return root
 
@@ -635,7 +713,7 @@ def create_source_target_popup(
     scrollable_frame = ctk.CTkScrollableFrame(
         POPUP, width=POPUP_SCROLL_WIDTH, height=POPUP_SCROLL_HEIGHT
     )
-    scrollable_frame.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+    scrollable_frame.grid(row=0, column=0, padx=16, pady=16, sticky="nsew")
 
     def on_button_click(map, button_num):
         map = update_popup_source(scrollable_frame, map, button_num)
@@ -649,8 +727,9 @@ def create_source_target_popup(
             command=lambda id=id: on_button_click(map, id),
             width=DEFAULT_BUTTON_WIDTH,
             height=DEFAULT_BUTTON_HEIGHT,
+            font=ctk.CTkFont(size=14, weight="normal")
         )
-        button.grid(row=id, column=0, padx=50, pady=10)
+        button.grid(row=id, column=0, padx=50, pady=12)
 
         x_label = ctk.CTkLabel(
             scrollable_frame,
@@ -675,13 +754,23 @@ def create_source_target_popup(
         target_image.grid(row=id, column=3, padx=10, pady=10)
         target_image.configure(image=tk_image)
 
-    popup_status_label = ctk.CTkLabel(POPUP, text=None, justify="center")
-    popup_status_label.grid(row=1, column=0, pady=15)
+    popup_status_label = ctk.CTkLabel(
+        POPUP, 
+        text=None, 
+        justify="center",
+        font=ctk.CTkFont(size=14, weight="normal")
+    )
+    popup_status_label.grid(row=1, column=0, pady=16)
 
     close_button = ctk.CTkButton(
-        POPUP, text="Submit", command=lambda: on_submit_click(start)
+        POPUP, 
+        text="Submit", 
+        command=lambda: on_submit_click(start),
+        font=ctk.CTkFont(size=15, weight="bold"),
+        fg_color="#6366F1",
+        hover_color="#8B5CF6"
     )
-    close_button.grid(row=2, column=0, pady=10)
+    close_button.grid(row=2, column=0, pady=16)
 
 
 def update_popup_source(
@@ -1114,14 +1203,31 @@ def create_source_target_popup_for_webcam(
         refresh_data(map)
         update_pop_live_status("Please provide mapping!")
 
-    popup_status_label_live = ctk.CTkLabel(POPUP_LIVE, text=None, justify="center")
-    popup_status_label_live.grid(row=1, column=0, pady=15)
+    popup_status_label_live = ctk.CTkLabel(
+        POPUP_LIVE, 
+        text=None, 
+        justify="center",
+        font=ctk.CTkFont(size=14, weight="normal")
+    )
+    popup_status_label_live.grid(row=1, column=0, pady=16)
 
-    add_button = ctk.CTkButton(POPUP_LIVE, text="Add", command=lambda: on_add_click())
+    add_button = ctk.CTkButton(
+        POPUP_LIVE, 
+        text="Add", 
+        command=lambda: on_add_click(),
+        font=ctk.CTkFont(size=14, weight="normal"),
+        fg_color="#4A4D50",
+        hover_color="#6E7174"
+    )
     add_button.place(relx=0.2, rely=0.92, relwidth=0.2, relheight=0.05)
 
     close_button = ctk.CTkButton(
-        POPUP_LIVE, text="Submit", command=lambda: on_submit_click()
+        POPUP_LIVE, 
+        text="Submit", 
+        command=lambda: on_submit_click(),
+        font=ctk.CTkFont(size=15, weight="bold"),
+        fg_color="#6366F1",
+        hover_color="#8B5CF6"
     )
     close_button.place(relx=0.6, rely=0.92, relwidth=0.2, relheight=0.05)
 
@@ -1132,7 +1238,7 @@ def refresh_data(map: list):
     scrollable_frame = ctk.CTkScrollableFrame(
         POPUP_LIVE, width=POPUP_LIVE_SCROLL_WIDTH, height=POPUP_LIVE_SCROLL_HEIGHT
     )
-    scrollable_frame.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+    scrollable_frame.grid(row=0, column=0, padx=16, pady=16, sticky="nsew")
 
     def on_sbutton_click(map, button_num):
         map = update_webcam_source(scrollable_frame, map, button_num)
@@ -1149,8 +1255,9 @@ def refresh_data(map: list):
             command=lambda id=id: on_sbutton_click(map, id),
             width=DEFAULT_BUTTON_WIDTH,
             height=DEFAULT_BUTTON_HEIGHT,
+            font=ctk.CTkFont(size=14, weight="normal")
         )
-        button.grid(row=id, column=0, padx=30, pady=10)
+        button.grid(row=id, column=0, padx=30, pady=12)
 
         x_label = ctk.CTkLabel(
             scrollable_frame,
@@ -1166,8 +1273,9 @@ def refresh_data(map: list):
             command=lambda id=id: on_tbutton_click(map, id),
             width=DEFAULT_BUTTON_WIDTH,
             height=DEFAULT_BUTTON_HEIGHT,
+            font=ctk.CTkFont(size=14, weight="normal")
         )
-        button.grid(row=id, column=3, padx=20, pady=10)
+        button.grid(row=id, column=3, padx=20, pady=12)
 
         if "source" in item:
             image = Image.fromarray(
