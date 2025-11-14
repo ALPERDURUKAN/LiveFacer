@@ -2,6 +2,7 @@ from typing import Any, List
 import cv2
 import threading
 import gfpgan
+import numpy as np
 import os
 
 import modules.globals
@@ -57,9 +58,25 @@ def get_face_enhancer() -> Any:
 
 
 def enhance_face(temp_frame: Frame) -> Frame:
+    original_frame = temp_frame.copy()
     with THREAD_SEMAPHORE:
-        _, _, temp_frame = get_face_enhancer().enhance(temp_frame, paste_back=True)
-    return temp_frame
+        _, _, enhanced_frame = get_face_enhancer().enhance(temp_frame, paste_back=True)
+
+    intensity = getattr(modules.globals, "face_enhancer_intensity", 1.0)
+    intensity = max(0.0, min(1.0, float(intensity)))
+
+    if intensity <= 0.0:
+        return original_frame
+    if intensity >= 1.0:
+        return enhanced_frame
+
+    blended_frame = cv2.addWeighted(
+        original_frame.astype(np.float32), 1.0 - intensity,
+        enhanced_frame.astype(np.float32), intensity,
+        0,
+    )
+    blended_frame = np.clip(blended_frame, 0, 255).astype(np.uint8)
+    return blended_frame
 
 
 def process_frame(source_face: Face, temp_frame: Frame) -> Frame:

@@ -135,8 +135,8 @@ def load_switch_states():
         modules.globals.show_eyes_mask_box = switch_states.get("show_eyes_mask_box", False)
         modules.globals.eyebrows_mask = switch_states.get("eyebrows_mask", False)
         modules.globals.show_eyebrows_mask_box = switch_states.get("show_eyebrows_mask_box", False)
-        modules.globals.live_width = switch_states.get("live_width", 1280)
-        modules.globals.live_height = switch_states.get("live_height", 720)
+        modules.globals.live_width = switch_states.get("live_width", 640)
+        modules.globals.live_height = switch_states.get("live_height", 640)
     except FileNotFoundError:
         # If the file doesn't exist, use default values
         pass
@@ -177,11 +177,11 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     source_container.grid(row=0, column=0, sticky="nsew", padx=(0, 16))
     source_container.grid_columnconfigure(0, weight=1)
     source_container.grid_rowconfigure(0, weight=1)
-    
+
     source_label = ctk.CTkLabel(
-        source_container, 
-        text=None, 
-        width=220, 
+        source_container,
+        text=None,
+        width=220,
         height=220,
         corner_radius=12,
         fg_color="transparent"
@@ -200,11 +200,11 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     target_container.grid(row=0, column=2, sticky="nsew", padx=(16, 0))
     target_container.grid_columnconfigure(0, weight=1)
     target_container.grid_rowconfigure(0, weight=1)
-    
+
     target_label = ctk.CTkLabel(
-        target_container, 
-        text=None, 
-        width=220, 
+        target_container,
+        text=None,
+        width=220,
         height=220,
         corner_radius=12,
         fg_color="transparent"
@@ -216,19 +216,19 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     button_frame.grid_columnconfigure((0, 1, 2), weight=1, uniform="face-buttons")
 
     select_face_button = ctk.CTkButton(
-        button_frame, 
-        text="Select a face", 
-        cursor="hand2", 
+        button_frame,
+        text="Select a face",
+        cursor="hand2",
         command=select_source_path,
         font=ctk.CTkFont(size=15, weight="normal")
     )
     select_face_button.grid(row=0, column=0, sticky="ew", padx=(0, 12))
 
     swap_faces_button = ctk.CTkButton(
-        button_frame, 
-        text="↔", 
-        cursor="hand2", 
-        command=swap_faces_paths, 
+        button_frame,
+        text="↔",
+        cursor="hand2",
+        command=swap_faces_paths,
         width=56,
         font=ctk.CTkFont(size=20, weight="bold")
     )
@@ -477,33 +477,68 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     )
     sharpness_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 
-    transparency_container = ctk.CTkFrame(slider_frame, fg_color="transparent")
-    transparency_container.grid(row=0, column=1, sticky="ew", padx=(16, 0))
-    transparency_container.grid_columnconfigure(0, weight=1)
+    opacity_container = ctk.CTkFrame(slider_frame, fg_color="transparent")
+    opacity_container.grid(row=0, column=1, sticky="ew", padx=(16, 0))
+    opacity_container.grid_columnconfigure(0, weight=1)
 
-    transparency_var = ctk.DoubleVar(value=modules.globals.opacity)
+    opacity_var = ctk.DoubleVar(value=modules.globals.opacity)
 
-    def on_transparency_change(value: float):
+    def on_opacity_change(value: float):
         val = float(value)
         modules.globals.opacity = val
         percentage = int(val * 100)
-        transparency_label.configure(text=f"Transparency: {percentage}%")
+        opacity_label.configure(text=f"Opacity: {percentage}%")
 
-    transparency_label = ctk.CTkLabel(
-        transparency_container,
-        text=f"Transparency: {int(modules.globals.opacity * 100)}%",
+    opacity_label = ctk.CTkLabel(
+        opacity_container,
+        text=f"Opacity: {int(modules.globals.opacity * 100)}%",
         font=ctk.CTkFont(size=15, weight="normal")
     )
-    transparency_label.grid(row=0, column=0, sticky="w", pady=(0, 4))
+    opacity_label.grid(row=0, column=0, sticky="w", pady=(0, 4))
 
-    transparency_slider = ctk.CTkSlider(
-        transparency_container,
+    opacity_slider = ctk.CTkSlider(
+        opacity_container,
         from_=0.0,
         to=1.0,
-        variable=transparency_var,
-        command=on_transparency_change,
+        variable=opacity_var,
+        command=on_opacity_change,
     )
-    transparency_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
+    opacity_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
+
+    enhancer_intensity_container = ctk.CTkFrame(slider_frame, fg_color="transparent")
+    enhancer_intensity_container.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(24, 0))
+    enhancer_intensity_container.grid_columnconfigure(0, weight=1)
+
+    enhancer_intensity_var = ctk.DoubleVar(
+        value=modules.globals.face_enhancer_intensity
+    )
+
+    def on_enhancer_intensity_change(value: float):
+        val = float(value)
+        val = max(0.0, min(1.0, val))
+        modules.globals.face_enhancer_intensity = val
+        percentage = int(val * 100)
+        enhancer_intensity_label.configure(
+            text=f"Enhancer Intensity: {percentage}%"
+        )
+
+    enhancer_intensity_label = ctk.CTkLabel(
+        enhancer_intensity_container,
+        text=(
+            f"Enhancer Intensity: {int(modules.globals.face_enhancer_intensity * 100)}%"
+        ),
+        font=ctk.CTkFont(size=15, weight="normal"),
+    )
+    enhancer_intensity_label.grid(row=0, column=0, sticky="w", pady=(0, 4))
+
+    enhancer_intensity_slider = ctk.CTkSlider(
+        enhancer_intensity_container,
+        from_=0.0,
+        to=1.0,
+        variable=enhancer_intensity_var,
+        command=on_enhancer_intensity_change,
+    )
+    enhancer_intensity_slider.grid(row=1, column=0, sticky="ew", pady=(8, 0))
 
     camera_frame = ctk.CTkFrame(content, fg_color="transparent")
     camera_frame.grid(row=4, column=0, sticky="ew", pady=(0, 24))
@@ -511,7 +546,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     camera_frame.grid_columnconfigure(3, weight=1)
 
     camera_label = ctk.CTkLabel(
-        camera_frame, 
+        camera_frame,
         text="Select Camera:",
         font=ctk.CTkFont(size=15, weight="normal")
     )
@@ -550,7 +585,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
 
     # Live Resolution Controls
     resolution_label = ctk.CTkLabel(
-        camera_frame, 
+        camera_frame,
         text="Live Resolution:",
         font=ctk.CTkFont(size=15, weight="normal")
     )
@@ -574,7 +609,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
             save_switch_states()
 
     width_label = ctk.CTkLabel(
-        camera_frame, 
+        camera_frame,
         text="Width:",
         font=ctk.CTkFont(size=14, weight="normal")
     )
@@ -591,7 +626,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     width_entry.bind("<FocusOut>", lambda e: on_width_change(width_entry.get()))
 
     height_label = ctk.CTkLabel(
-        camera_frame, 
+        camera_frame,
         text="Height:",
         font=ctk.CTkFont(size=14, weight="normal")
     )
@@ -623,9 +658,9 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     start_button.grid(row=0, column=0, sticky="ew", padx=(0, 12))
 
     stop_button = ctk.CTkButton(
-        action_frame, 
-        text="Destroy", 
-        cursor="hand2", 
+        action_frame,
+        text="Destroy",
+        cursor="hand2",
         command=destroy,
         font=ctk.CTkFont(size=15, weight="normal"),
         fg_color="#4A4D50",
@@ -634,9 +669,9 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     stop_button.grid(row=0, column=1, sticky="ew", padx=12)
 
     preview_button = ctk.CTkButton(
-        action_frame, 
-        text="Preview", 
-        cursor="hand2", 
+        action_frame,
+        text="Preview",
+        cursor="hand2",
         command=toggle_preview,
         font=ctk.CTkFont(size=15, weight="normal"),
         fg_color="#6366F1",
@@ -645,9 +680,9 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     preview_button.grid(row=0, column=2, sticky="ew", padx=(12, 0))
 
     donate_label = ctk.CTkLabel(
-        content, 
-        text="LiveFacer", 
-        justify="center", 
+        content,
+        text="LiveFacer",
+        justify="center",
         cursor="hand2",
         font=ctk.CTkFont(size=16, weight="normal")
     )
@@ -660,8 +695,8 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     )
 
     status_label = ctk.CTkLabel(
-        content, 
-        text=None, 
+        content,
+        text=None,
         justify="center",
         font=ctk.CTkFont(size=14, weight="normal")
     )
@@ -755,16 +790,16 @@ def create_source_target_popup(
         target_image.configure(image=tk_image)
 
     popup_status_label = ctk.CTkLabel(
-        POPUP, 
-        text=None, 
+        POPUP,
+        text=None,
         justify="center",
         font=ctk.CTkFont(size=14, weight="normal")
     )
     popup_status_label.grid(row=1, column=0, pady=16)
 
     close_button = ctk.CTkButton(
-        POPUP, 
-        text="Submit", 
+        POPUP,
+        text="Submit",
         command=lambda: on_submit_click(start),
         font=ctk.CTkFont(size=15, weight="bold"),
         fg_color="#6366F1",
@@ -1204,16 +1239,16 @@ def create_source_target_popup_for_webcam(
         update_pop_live_status("Please provide mapping!")
 
     popup_status_label_live = ctk.CTkLabel(
-        POPUP_LIVE, 
-        text=None, 
+        POPUP_LIVE,
+        text=None,
         justify="center",
         font=ctk.CTkFont(size=14, weight="normal")
     )
     popup_status_label_live.grid(row=1, column=0, pady=16)
 
     add_button = ctk.CTkButton(
-        POPUP_LIVE, 
-        text="Add", 
+        POPUP_LIVE,
+        text="Add",
         command=lambda: on_add_click(),
         font=ctk.CTkFont(size=14, weight="normal"),
         fg_color="#4A4D50",
@@ -1222,8 +1257,8 @@ def create_source_target_popup_for_webcam(
     add_button.place(relx=0.2, rely=0.92, relwidth=0.2, relheight=0.05)
 
     close_button = ctk.CTkButton(
-        POPUP_LIVE, 
-        text="Submit", 
+        POPUP_LIVE,
+        text="Submit",
         command=lambda: on_submit_click(),
         font=ctk.CTkFont(size=15, weight="bold"),
         fg_color="#6366F1",
