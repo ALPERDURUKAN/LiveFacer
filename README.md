@@ -53,7 +53,7 @@ For the original Deep-Live-Cam pre-built versions, please visit [deeplivecam.net
 **Retain your original mouth for accurate movement using Mouth Mask**
 
 <p align="center">
-  <img src="media/ludwig.gif" alt="resizable-gif">
+  <img src="media/demowebcam.png" alt="png">
 </p>
 
 ### Face Mapping
