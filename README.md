@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="media/demo.gif" alt="Demo GIF" width="800">
+  <img src="media/demowebcam.png" alt="Demo GIF" width="800">
 </p>
 
 ##  Disclaimer
