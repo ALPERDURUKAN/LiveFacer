@@ -58,3 +58,4 @@ face_swapper_enabled: bool = True
 face_mask_blur = 31
 mask_blur_kernel = 15
 lang: str = "en"
+virtual_camera = False

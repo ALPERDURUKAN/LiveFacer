@@ -10,6 +10,7 @@ import json
 
 import modules.globals
 import modules.metadata
+import modules.virtual_camera
 from modules.gettext import LanguageManager
 from modules.face_analyser import (
     get_one_face,
@@ -138,6 +139,7 @@ def load_switch_states():
         modules.globals.show_eyes_mask_box = switch_states.get("show_eyes_mask_box", False)
         modules.globals.eyebrows_mask = switch_states.get("eyebrows_mask", False)
         modules.globals.show_eyebrows_mask_box = switch_states.get("show_eyebrows_mask_box", False)
+        modules.globals.virtual_camera = switch_states.get("virtual_camera", False)
     except FileNotFoundError:
         # If the file doesn't exist, use default values
         pass
@@ -278,6 +280,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
         {"text": "Many Faces", "getter": lambda: modules.globals.many_faces, "setter": lambda val: set_attr("many_faces", val)},
         {"text": "Fix Blueish Cam", "getter": lambda: modules.globals.color_correction, "setter": lambda val: set_attr("color_correction", val)},
         {"text": "Show FPS", "getter": lambda: modules.globals.show_fps, "setter": lambda val: set_attr("show_fps", val)},
+        {"text": "Virtual Camera", "getter": lambda: modules.globals.virtual_camera, "setter": lambda val: set_attr("virtual_camera", val)},
     ]
 
     columns = 3
@@ -1024,6 +1027,9 @@ def create_webcam_preview(camera_index: int):
     frame_count = 0
     fps = 0
 
+    if modules.globals.virtual_camera:
+        modules.virtual_camera.init(modules.globals.live_width, modules.globals.live_height, 60)
+
     while camera:
         ret, frame = camera.read()
         if not ret:
@@ -1088,10 +1094,15 @@ def create_webcam_preview(camera_index: int):
         preview_label.configure(image=image)
         ROOT.update()
 
+        if modules.globals.virtual_camera:
+            modules.virtual_camera.send(temp_frame)
+
         if PREVIEW.state() == "withdrawn":
             break
 
     camera.release()
+    if modules.globals.virtual_camera:
+        modules.virtual_camera.stop()
     PREVIEW.withdraw()
 
 
