@@ -43,6 +43,12 @@ def pre_start() -> bool:
     return True
 
 
+import torch
+try:
+    import torch_directml
+except ImportError:
+    torch_directml = None
+
 def get_face_enhancer() -> Any:
     global FACE_ENHANCER
 
@@ -53,7 +59,12 @@ def get_face_enhancer() -> Any:
                 # todo: set models path https://github.com/TencentARC/GFPGAN/issues/399
             else:
                 model_path = resolve_relative_path("../models/GFPGANv1.4.pth")
-            FACE_ENHANCER = gfpgan.GFPGANer(model_path=model_path, upscale=1)  # type: ignore[attr-defined]
+            
+            device = None
+            if "DmlExecutionProvider" in modules.globals.execution_providers and torch_directml:
+                device = torch_directml.device()
+            
+            FACE_ENHANCER = gfpgan.GFPGANer(model_path=model_path, upscale=1, device=device)  # type: ignore[attr-defined]
     return FACE_ENHANCER
 
 
