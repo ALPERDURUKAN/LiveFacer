@@ -1,4 +1,6 @@
 <h1 align="center">LiveFacer</h1>
+<h2 align="center">(Under development and has bugs, will be addressed. Watch out the repo for new releases!)</h2>
+
 
 <p align="center">
   Real-time face swap and video deepfake with a single click and only a single image.
