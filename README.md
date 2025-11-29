@@ -1,4 +1,4 @@
-<h1 align="center">Deep-Live-Cam</h1>
+<h1 align="center">LiveFacer</h1>
 
 <p align="center">
   Real-time face swap and video deepfake with a single click and only a single image.
@@ -17,6 +17,16 @@ We are aware of the potential for unethical applications and are committed to pr
 
 Users are expected to use this software responsibly and legally. If using a real person's face, obtain their consent and clearly label any output as a deepfake when sharing online. We are not responsible for end-user actions.
 
+## Key Improvements over Deep-Live-Cam
+
+This is a customized fork of Deep-Live-Cam with significant enhancements:
+
+- **Enhanced Launchers**: Includes both a lightweight Batch-to-EXE launcher and a professional C# launcher for secure and easy startup.
+- **Portable Virtual Camera**: Integrated virtual camera support without requiring external OBS installation.
+- **Improved Face Masking**: Expanded mouth mask coverage to handle beards and mustaches better.
+- **Live Stream Resizing**: Dynamic resizing of the live stream window for better usability.
+- **Hardware Compatibility**: Resolved conflicts between ONNX Runtime providers (NVIDIA, AMD, OpenVINO).
+- **Manual Installation Support**: Fully supports manual installation from the `/code` directory.
 
 ## Quick Start (Windows / Nvidia)
 
@@ -26,6 +36,7 @@ Users are expected to use this software responsibly and legally. If using a real
 
 ## Installation (Manual)
 **Please be aware that the installation needs technical skills and is NOT for beginners, consider downloading the prebuilt. Please do NOT open platform and installation related issues on GitHub before discussing it on the discord server.**
+
 ### Basic Installation (CPU)
 
 This is more likely to work on your computer but will be slower as it utilizes the CPU.
@@ -41,7 +52,7 @@ This is more likely to work on your computer but will be slower as it utilizes t
 **2. Clone Repository**
 
 ```bash
-https://github.com/hacksider/Deep-Live-Cam.git
+git clone https://github.com/ALPERDURUKAN/LiveFacer.git
 ```
 
 **3. Download Models**
@@ -49,12 +60,18 @@ https://github.com/hacksider/Deep-Live-Cam.git
 1. [GFPGANv1.4](https://huggingface.co/hacksider/deep-live-cam/resolve/main/GFPGANv1.4.pth)
 2. [inswapper_128_fp16.onnx](https://huggingface.co/hacksider/deep-live-cam/resolve/main/inswapper_128.onnx) (Note: Use this [replacement version](https://github.com/facefusion/facefusion-assets/releases/download/models/inswapper_128.onnx) if you encounter issues)
 
-Place these files in the "**models**" folder.
+Place these files in the "**models**" folder inside the `code` directory (e.g., `code/models`).
 
 **4. Install Dependencies**
 
 We highly recommend using a `venv` to avoid issues.
 
+Navigate to the `code` directory:
+```bash
+cd code
+```
+
+Install the requirements:
 ```bash
 pip install -r requirements.txt
 ```
@@ -65,7 +82,7 @@ pip install -r requirements.txt
 brew install python-tk@3.10
 ```
 
-**Run:** If you don't have a GPU, you can run Deep-Live-Cam using `python run.py`. Note that initial execution will download models (~300MB).
+**Run:** If you don't have a GPU, you can run LiveFacer using `python run.py` from the `code` directory. Note that initial execution will download models (~300MB).
 
 
 ### GPU Acceleration (Optional)
@@ -152,7 +169,7 @@ python run.py --execution-provider openvino
 - Select a source face image.
 - Click "Live".
 - Wait for the preview to appear (10-30 seconds).
-- Use a screen capture tool like OBS to stream.
+- Use the built-in virtual camera or a screen capture tool like OBS to stream.
 - To change the face, select a new source image.
 
 ![demo-gif](media/demo.gif)
