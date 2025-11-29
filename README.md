@@ -21,18 +21,17 @@ Users are expected to use this software responsibly and legally. If using a real
 
 This is a customized fork of Deep-Live-Cam with significant enhancements:
 
-- **Enhanced Launchers**: Includes both a lightweight Batch-to-EXE launcher and a professional C# launcher for secure and easy startup.
-- **Portable Virtual Camera**: Integrated virtual camera support without requiring external OBS installation.
+- **Portable Virtual Camera**: Integrated virtual camera support (Still requires OBS Studio to be installed only)
 - **Improved Face Masking**: Expanded mouth mask coverage to handle beards and mustaches better.
 - **Live Stream Resizing**: Dynamic resizing of the live stream window for better usability.
 - **Hardware Compatibility**: Resolved conflicts between ONNX Runtime providers (NVIDIA, AMD, OpenVINO).
-- **Manual Installation Support**: Fully supports manual installation from the `/code` directory.
+
 
 ## Quick Start (Windows / Nvidia)
 
-[![Download](media/download.png)](https://hacksider.gumroad.com/l/vccdmm)
+[![Download](media/download.png)](https://durq.gumroad.com/l/livefacer)
 
-[Download latest pre-built version with CUDA support](https://hacksider.gumroad.com/l/vccdmm) - No Manual Installation/Downloading required.
+[Download latest pre-built version with GPU support](https://durq.gumroad.com/l/livefacer) - No Manual Installation/Downloading required.
 
 ## Installation (Manual)
 **Please be aware that the installation needs technical skills and is NOT for beginners, consider downloading the prebuilt. Please do NOT open platform and installation related issues on GitHub before discussing it on the discord server.**
