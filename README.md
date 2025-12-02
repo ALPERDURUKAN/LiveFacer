@@ -59,15 +59,15 @@ git clone https://github.com/ALPERDURUKAN/LiveFacer.git
 1. [GFPGANv1.4](https://huggingface.co/hacksider/deep-live-cam/resolve/main/GFPGANv1.4.pth)
 2. [inswapper_128_fp16.onnx](https://huggingface.co/hacksider/deep-live-cam/resolve/main/inswapper_128.onnx) (Note: Use this [replacement version](https://github.com/facefusion/facefusion-assets/releases/download/models/inswapper_128.onnx) if you encounter issues)
 
-Place these files in the "**models**" folder inside the `code` directory (e.g., `code/models`).
+Place these files in the "**models**" folder (e.g., `LiveFacer/models`).
 
 **4. Install Dependencies**
 
 We highly recommend using a `venv` to avoid issues.
 
-Navigate to the `code` directory:
+Navigate to the repository directory:
 ```bash
-cd code
+cd LiveFacer
 ```
 
 Install the requirements:
@@ -81,7 +81,7 @@ pip install -r requirements.txt
 brew install python-tk@3.10
 ```
 
-**Run:** If you don't have a GPU, you can run LiveFacer using `python run.py` from the `code` directory. Note that initial execution will download models (~300MB).
+**Run:** If you don't have a GPU, you can run LiveFacer using `python run.py` from the repository directory. Note that initial execution will download models (~300MB).
 
 
 ### GPU Acceleration (Optional)

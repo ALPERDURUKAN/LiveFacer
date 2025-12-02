@@ -11,8 +11,8 @@ if is_frozen:
     # Running as executable - use PyInstaller temp directory
     base_dir = sys._MEIPASS
 else:
-    # Running as script - use parent directory of code/
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Running as script - use directory containing run.py
+    base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Set environment variables exactly as in start_portable_nvidia.bat
 os.environ['appdata'] = os.path.join(base_dir, 'system', 'tmp')

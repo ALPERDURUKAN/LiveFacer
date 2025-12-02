@@ -17,7 +17,6 @@ torchvision; sys_platform != 'darwin'
 torchvision==0.20.1; sys_platform == 'darwin'
 onnxruntime-silicon==1.16.3; sys_platform == 'darwin' and platform_machine == 'arm64'
 onnxruntime-gpu==1.22.0; sys_platform != 'darwin'
-onnxruntime-tensorrt==1.22.0; sys_platform != 'darwin'
 onnxruntime-openvino==1.22.0; sys_platform != 'darwin'
 tensorflow; sys_platform != 'darwin'
 opennsfw2==0.10.2
