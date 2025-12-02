@@ -24,7 +24,7 @@ NAME = "DLC.FACE-ENHANCER"
 
 
 def pre_check() -> bool:
-    download_directory_path = resolve_relative_path("..\models")
+    download_directory_path = resolve_relative_path("../models")
     conditional_download(
         download_directory_path,
         [
