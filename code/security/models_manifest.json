@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "name": "inswapper_128_fp16",
+      "filename": "inswapper_128_fp16.onnx",
+      "url": "https://huggingface.co/hacksider/deep-live-cam/resolve/main/inswapper_128_fp16.onnx",
+      "sha256": "REPLACE_WITH_SHA256"
+    },
+    {
+      "name": "gfpgan_v1_4",
+      "filename": "GFPGANv1.4.pth",
+      "url": "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth",
+      "sha256": "REPLACE_WITH_SHA256"
+    }
+  ]
+}
