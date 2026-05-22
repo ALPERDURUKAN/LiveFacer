@@ -1,3 +1,39 @@
-# Large model files
-models/*.pth
-models/*.onnx
+# --- Python cache / build (project code only) ---
+code/**/__pycache__/
+code/**/*.py[cod]
+code/**/*$py.class
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Runtime state ---
+code/switch_states.json
+
+# --- Logs / temp ---
+code/*.log
+code/*.tmp
+
+# --- Portable runtime cache noise (safe to ignore) ---
+system/tmp/appdata/
+system/tmp/pip-cache/
+system/tmp/pip-unpack-*/
+system/tmp/pip-build-env-*/
+system/tmp/pip-req-build-*/
+system/tmp/pip-ephem-wheel-cache/
+system/tmp/tmp*/
+system/tmp/**/DXCache/
+system/tmp/**/GLCache/
+system/tmp/**/GPUCache/
+system/tmp/**/Code Cache/
+system/tmp/**/Cache/
+
+# --- Exclude Large and Generated Files ---
+system/
+dist_protected/
+repomix-output-hacksider-Deep-Live-Cam*.xml
+
+*.pth
+code/gfpgan/weights/
