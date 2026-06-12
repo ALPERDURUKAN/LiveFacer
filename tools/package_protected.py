@@ -32,6 +32,10 @@ DEFAULT_EXCLUDES = (
     "*.pyc",
     "system/tmp",
     "dist_protected",
+    "dist_releases",
+    "dist_test_build",
+    ".venv_test",
+    "*.whl",
 )
 
 CRITICAL_FILES = (
@@ -57,6 +61,7 @@ class BuildContext:
     product_permalink: str
     grace_days: int
     minimal_stage: bool
+    no_license: bool
 
 
 def parse_args() -> argparse.Namespace:
@@ -68,6 +73,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--product-permalink", default="")
     parser.add_argument("--grace-days", type=int, default=7)
     parser.add_argument("--minimal-stage", action="store_true", default=False)
+    parser.add_argument("--no-license", action="store_true", default=False, help="Disable license enforcement")
     return parser.parse_args()
 
 
@@ -193,7 +199,7 @@ def write_security_bundle(context: BuildContext) -> None:
     )
 
     license_config = {
-        "license_enforced": True,
+        "license_enforced": not context.no_license,
         "product_id": context.product_id,
         "product_permalink": context.product_permalink or "livefacer",
         "offline_grace_days": context.grace_days,
@@ -233,13 +239,17 @@ def build_single_exe(context: BuildContext) -> None:
     if not stage_run.exists():
         raise RuntimeError(f"Stage entry script not found: {stage_run}")
 
+    # Build artifacts now go into 'bin' folder to avoid Windows file locks
+    bin_dir = context.output_dir / "bin"
+    bin_dir.mkdir(parents=True, exist_ok=True)
+
     app_name = "LiveFacerProtected"
     pyinstaller_cmd = [
         str(context.python_exe),
         "-m",
         "PyInstaller",
         "--noconfirm",
-        "--onefile",
+        "--onedir",
         "--name",
         app_name,
         "--distpath",
@@ -252,18 +262,33 @@ def build_single_exe(context: BuildContext) -> None:
         f"{context.stage_dir / 'code'};code",
         "--add-data",
         f"{context.stage_dir / 'system'};system",
+        # Force collection of dynamic modules
+        '--collect-submodules', 'modules',
+        '--collect-data', 'modules',
+        '--collect-data', 'insightface',
+        '--hidden-import', 'modules.processors.frame.face_swapper',
+        '--hidden-import', 'modules.processors.frame.face_enhancer',
+        '--hidden-import', 'modules.processors.frame.face_enhancer_gpen256',
+        '--hidden-import', 'modules.processors.frame.face_enhancer_gpen512',
         str(stage_run),
     ]
     pyinstaller_env = os.environ.copy()
     existing_py_path = pyinstaller_env.get("PYTHONPATH", "")
+    
+    # Prepend site-packages-gpu so PyInstaller bundles onnxruntime-gpu instead of CPU
+    gpu_site = context.project_root / "system" / "python" / "Lib" / "site-packages-gpu"
+    py_path_base = str(tools_site)
+    if gpu_site.exists():
+        py_path_base += os.pathsep + str(gpu_site)
+        
     pyinstaller_env["PYTHONPATH"] = (
-        str(tools_site)
+        py_path_base
         if not existing_py_path
-        else str(tools_site) + os.pathsep + existing_py_path
+        else py_path_base + os.pathsep + existing_py_path
     )
     subprocess.check_call(pyinstaller_cmd, env=pyinstaller_env)
 
-    output_file = context.dist_dir / f"{app_name}.exe"
+    output_file = context.dist_dir / app_name / f"{app_name}.exe"
     if not output_file.exists():
         raise RuntimeError(f"Expected output executable was not generated: {output_file}")
 
@@ -275,7 +300,7 @@ def main() -> int:
     output_dir = Path(args.output_dir).resolve()
     stage_dir = output_dir / "stage_workspace"
     work_dir = output_dir / "build_work"
-    dist_dir = output_dir / "single_exe"
+    dist_dir = output_dir / "bin"
     python_exe = project_root / "system" / "python" / "python.exe"
 
     context = BuildContext(
@@ -290,6 +315,7 @@ def main() -> int:
         product_permalink=args.product_permalink,
         grace_days=max(1, int(args.grace_days)),
         minimal_stage=bool(args.minimal_stage),
+        no_license=args.no_license,
     )
 
     output_dir.mkdir(parents=True, exist_ok=True)
