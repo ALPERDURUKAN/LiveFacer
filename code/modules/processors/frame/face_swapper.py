@@ -171,10 +171,8 @@ DETECTION_INTERVAL = 0.033  # ~30 FPS detection rate for live mode
 FRAME_SKIP_COUNTER = 0
 ADAPTIVE_QUALITY = True
 # --- END: Mac M1-M5 Optimizations ---
-abs_dir = os.path.dirname(os.path.abspath(__file__))
-models_dir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(abs_dir))), "models"
-)
+from modules.utilities import get_app_root
+models_dir = os.path.join(get_app_root(), "models")
 def pre_check() -> bool:
     # Use models_dir instead of abs_dir to save to the correct location
     download_directory_path = models_dir
@@ -294,10 +292,12 @@ def _get_soft_alpha(size: int) -> np.ndarray:
         # show as a visible box on the face. An ellipse (axes 0.44*size) zeroes
         # the corners and the heavy blur feathers smoothly into the original.
         center = (size // 2, size // 2)
-        axes = (int(size * 0.44), int(size * 0.44))
+        # Increase the ellipse size slightly to 0.47 * size (keeps mouth/lips solid)
+        axes = (int(size * 0.47), int(size * 0.47))
         mask = np.zeros((size, size), dtype=np.uint8)
         cv2.ellipse(mask, center, axes, 0, 0, 360, 255, -1)
-        mask = cv2.GaussianBlur(mask, (31, 31), 12)
+        # Reduce the blur slightly to 21x21 to keep face/mouth details extremely sharp
+        mask = cv2.GaussianBlur(mask, (21, 21), 7)
         _paste_cache['soft_alpha'] = mask  # uint8 [0, 255] — blended via cv2 SIMD ops
         _paste_cache['alpha_size'] = size
     return _paste_cache['soft_alpha']
@@ -457,9 +457,11 @@ def swap_face(source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
     poisson_blend_enabled = getattr(modules.globals, "poisson_blend", False)
     # Poisson blend's seamlessClone needs the genuine pre-swap frame as its
     # destination. Without this, original_frame aliases temp_frame, which
+    eyes_mask_enabled = getattr(modules.globals, "eyes_mask", False)
+    eyebrows_mask_enabled = getattr(modules.globals, "eyebrows_mask", False)
     # _fast_paste_back mutates in place — so seamlessClone would blend the
     # swapped face onto the already-swapped frame (no visible effect).
-    needs_original = opacity < 1.0 or mouth_mask_enabled or poisson_blend_enabled
+    needs_original = opacity < 1.0 or mouth_mask_enabled or eyes_mask_enabled or eyebrows_mask_enabled or poisson_blend_enabled
     if needs_original:
         original_frame = temp_frame.copy()
     else:
@@ -493,25 +495,53 @@ def swap_face(source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
         return original_frame
     # --- Post-swap Processing (Masking, Opacity, etc.) ---
     # Now, work with the guaranteed uint8 'swapped_frame'
-    if mouth_mask_enabled: # Check if mouth_mask is enabled
+    if mouth_mask_enabled or eyes_mask_enabled or eyebrows_mask_enabled:
         # Create a mask for the target face
         face_mask = create_face_mask(target_face, original_frame) # Use original_frame for mask creation geometry
-        # Create the mouth mask using the ORIGINAL frame (before swap) for cutout
-        mouth_mask, mouth_cutout, mouth_box, lower_lip_polygon = (
-            create_lower_mouth_mask(target_face, original_frame) # Use original_frame for real mouth cutout
-        )
-        # Apply the mouth area only if mouth_cutout exists
-        if mouth_cutout is not None and mouth_box != (0,0,0,0):
-            # Apply mouth area (from original) onto the 'swapped_frame'
-            swapped_frame = apply_mouth_area(
-                swapped_frame, mouth_cutout, mouth_box, face_mask, lower_lip_polygon
+        
+        if mouth_mask_enabled:
+            # Create the mouth mask using the ORIGINAL frame (before swap) for cutout
+            mouth_mask, mouth_cutout, mouth_box, lower_lip_polygon = (
+                create_lower_mouth_mask(target_face, original_frame) # Use original_frame for real mouth cutout
             )
-            # Draw bounding box only while slider is being dragged
-            if getattr(modules.globals, "show_mouth_mask_box", False):
-                mouth_mask_data = (mouth_mask, mouth_cutout, mouth_box, lower_lip_polygon)
-                swapped_frame = draw_mouth_mask_visualization(
-                    swapped_frame, target_face, mouth_mask_data
+            # Apply the mouth area only if mouth_cutout exists
+            if mouth_cutout is not None and mouth_box != (0,0,0,0):
+                # Apply mouth area (from original) onto the 'swapped_frame'
+                swapped_frame = apply_mouth_area(
+                    swapped_frame, mouth_cutout, mouth_box, face_mask, lower_lip_polygon
                 )
+                # Draw bounding box only while slider is being dragged
+                if getattr(modules.globals, "show_mouth_mask_box", False):
+                    mouth_mask_data = (mouth_mask, mouth_cutout, mouth_box, lower_lip_polygon)
+                    swapped_frame = draw_mouth_mask_visualization(
+                        swapped_frame, target_face, mouth_mask_data
+                    )
+                    
+        if eyes_mask_enabled:
+            eyes_mask, eyes_cutout, eyes_box, eyes_polygons = (
+                create_facial_feature_mask(target_face, original_frame, [(35, 43), (89, 97)], "eyes_mask_size")
+            )
+            if eyes_cutout is not None and eyes_box != (0,0,0,0):
+                swapped_frame = apply_feature_area(
+                    swapped_frame, eyes_cutout, eyes_box, face_mask, eyes_polygons
+                )
+                if getattr(modules.globals, "show_eyes_mask_box", False):
+                    swapped_frame = draw_feature_visualization(
+                        swapped_frame, eyes_box, eyes_polygons, "Eyes Mask"
+                    )
+
+        if eyebrows_mask_enabled:
+            eyebrows_mask, eyebrows_cutout, eyebrows_box, eyebrows_polygons = (
+                create_facial_feature_mask(target_face, original_frame, [(43, 52), (97, 106)], "eyebrows_mask_size")
+            )
+            if eyebrows_cutout is not None and eyebrows_box != (0,0,0,0):
+                swapped_frame = apply_feature_area(
+                    swapped_frame, eyebrows_cutout, eyebrows_box, face_mask, eyebrows_polygons
+                )
+                if getattr(modules.globals, "show_eyebrows_mask_box", False):
+                    swapped_frame = draw_feature_visualization(
+                        swapped_frame, eyebrows_box, eyebrows_polygons, "Eyebrows Mask"
+                    )
     # --- Poisson Blending ---
     # Mask derived from the swap's own affine (M) + swapped pixels (bgr_fake),
     # so it tracks the swapped face exactly per-frame — no landmark jitter,
@@ -982,7 +1012,7 @@ def create_lower_mouth_mask(
         # The known-good version expanded by the now-unused mask_down_size
         # constant, which is why the slider had no effect.
         # s: 0.0 (slider ~0, tight lip outline) -> 1.0 (slider 100, mouth->chin).
-        mouth_mask_size = getattr(modules.globals, "mouth_mask_size", 0.0) # 0-100 slider
+        mouth_mask_size = getattr(modules.globals, "mouth_mask_size", 40.0) # Default to 40 to cover tongue
         s = max(0.0, min(1.0, mouth_mask_size / 100.0))
         # Uniformly scaling a simple polygon about its centroid keeps it simple
         # (no self-intersection). x grows with expansion_factor; points below
@@ -996,11 +1026,16 @@ def create_lower_mouth_mask(
         expanded_landmarks = lower_lip_landmarks.copy()
         expanded_landmarks[:, 0] = center[0] + offsets[:, 0] * expansion_factor
         expanded_landmarks[:, 1] = center[1] + offsets[:, 1] * scale_y
+
         # Ensure landmarks are finite after adjustments
         if not np.all(np.isfinite(expanded_landmarks)):
-            # print("Warning: Non-finite values detected after expanding landmarks.")
             return mask, mouth_cutout, mouth_box, lower_lip_polygon
+
         expanded_landmarks = expanded_landmarks.astype(np.int32)
+        
+        # Use convex hull to prevent self-intersecting zigzags!
+        expanded_landmarks = cv2.convexHull(expanded_landmarks)[:, 0, :]
+        
         min_x, min_y = np.min(expanded_landmarks, axis=0)
         max_x, max_y = np.max(expanded_landmarks, axis=0)
         # Add padding *after* initial min/max calculation
@@ -1160,18 +1195,117 @@ def apply_mouth_area(
             feathered_mask.fill(0.0)
         # --- Blending: paste original mouth onto swapped face ---
         if len(frame.shape) == 3 and frame.shape[2] == 3:
-            mask_3ch = feathered_mask[:, :, np.newaxis].astype(np.float32)
-            inv_mask = 1.0 - mask_3ch
-            # Blend: (original_mouth * mask) + (swapped_face * (1 - mask))
-            blended_roi = (resized_mouth_cutout.astype(np.float32) * mask_3ch +
-                           roi.astype(np.float32) * inv_mask)
-            frame[min_y:max_y, min_x:max_x] = np.clip(blended_roi, 0, 255).astype(np.uint8)
+            try:
+                # Use seamless clone for color-matched blending
+                center_x = box_width // 2
+                center_y = box_height // 2
+                
+                # seamlessClone needs the mask region to not touch the borders
+                # The padding added in create_lower_mouth_mask ensures this.
+                blended_roi = cv2.seamlessClone(
+                    resized_mouth_cutout.astype(np.uint8), 
+                    roi.astype(np.uint8), 
+                    polygon_mask_roi, 
+                    (center_x, center_y), 
+                    cv2.NORMAL_CLONE
+                )
+                frame[min_y:max_y, min_x:max_x] = blended_roi
+            except Exception as e:
+                # print(f"seamlessClone failed for mouth mask: {e}")
+                # Fallback to alpha blending
+                mask_3ch = feathered_mask[:, :, np.newaxis].astype(np.float32)
+                inv_mask = 1.0 - mask_3ch
+                # Blend: (original_mouth * mask) + (swapped_face * (1 - mask))
+                blended_roi = (resized_mouth_cutout.astype(np.float32) * mask_3ch +
+                               roi.astype(np.float32) * inv_mask)
+                frame[min_y:max_y, min_x:max_x] = np.clip(blended_roi, 0, 255).astype(np.uint8)
     except Exception as e:
         print(f"Error applying mouth area: {e}") # Optional debug
-        # import traceback
-        # traceback.print_exc()
         pass # Don't crash, just return the frame as is
     return frame
+
+def create_facial_feature_mask(face: Face, frame: Frame, index_ranges: list, mask_size_attr: str) -> tuple:
+    mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+    cutout = None
+    polygons = []
+    box = (0, 0, 0, 0)
+    if face is None or not hasattr(face, 'landmark_2d_106'):
+        return mask, cutout, box, polygons
+    landmarks = face.landmark_2d_106
+    if landmarks is None or not isinstance(landmarks, np.ndarray) or landmarks.shape[0] < 106 or not np.all(np.isfinite(landmarks)):
+        return mask, cutout, box, polygons
+
+    mask_size = getattr(modules.globals, mask_size_attr, 0.0)
+    s = max(0.0, min(1.0, mask_size / 100.0))
+    expansion_factor = 1.0 + s * 1.5
+
+    all_pts = []
+    for r in index_ranges:
+        pts = landmarks[r[0]:r[1]].astype(np.float32)
+        if len(pts) < 3: continue
+        center = np.mean(pts, axis=0)
+        expanded = center + (pts - center) * expansion_factor
+        poly = cv2.convexHull(expanded.astype(np.int32))[:, 0, :]
+        polygons.append(poly)
+        all_pts.extend(poly)
+
+    if not all_pts: return mask, cutout, box, polygons
+    all_pts = np.array(all_pts)
+    min_x, min_y = np.min(all_pts, axis=0)
+    max_x, max_y = np.max(all_pts, axis=0)
+
+    pad_ratio = 0.1
+    pad_x, pad_y = int((max_x - min_x) * pad_ratio), int((max_y - min_y) * pad_ratio)
+    min_x, min_y = max(0, min_x - pad_x), max(0, min_y - pad_y)
+    max_x, max_y = min(frame.shape[1], max_x + pad_x), min(frame.shape[0], max_y + pad_y)
+
+    if max_x > min_x and max_y > min_y:
+        mask_roi = np.zeros((max_y - min_y, max_x - min_x), dtype=np.uint8)
+        for poly in polygons:
+            cv2.fillPoly(mask_roi, [(poly - [min_x, min_y]).astype(np.int32)], 255)
+        blur_k = max(1, getattr(modules.globals, "mask_blur_kernel", 15) // 2 * 2 + 1)
+        mask_roi = gpu_gaussian_blur(mask_roi, (blur_k, blur_k), 0)
+        mask[min_y:max_y, min_x:max_x] = mask_roi
+        cutout = frame[min_y:max_y, min_x:max_x].copy()
+        box = (min_x, min_y, max_x, max_y)
+    return mask, cutout, box, polygons
+
+def apply_feature_area(frame: np.ndarray, cutout: np.ndarray, box: tuple, face_mask: np.ndarray, polygons: list) -> np.ndarray:
+    if frame is None or cutout is None or box == (0,0,0,0) or face_mask is None or not polygons: return frame
+    min_x, min_y, max_x, max_y = map(int, box)
+    if max_x <= min_x or max_y <= min_y: return frame
+    
+    local_mask = np.zeros((max_y - min_y, max_x - min_x), dtype=np.uint8)
+    for poly in polygons:
+        cv2.fillPoly(local_mask, [(poly - [min_x, min_y]).astype(np.int32)], 255)
+    
+    blur_k = max(1, getattr(modules.globals, "mask_blur_kernel", 15) // 2 * 2 + 1)
+    local_mask = gpu_gaussian_blur(local_mask, (blur_k, blur_k), 0)
+    
+    local_face = face_mask[min_y:max_y, min_x:max_x]
+    combined = (local_mask.astype(np.float32)/255.0) * (local_face.astype(np.float32)/255.0)
+    if combined.shape[:2] != cutout.shape[:2]: return frame
+    combined = np.expand_dims(combined, axis=2)
+    
+    roi = frame[min_y:max_y, min_x:max_x].astype(np.float32)
+    blended = roi * (1.0 - combined) + cutout.astype(np.float32) * combined
+    frame[min_y:max_y, min_x:max_x] = np.clip(blended, 0, 255).astype(np.uint8)
+    return frame
+
+def draw_feature_visualization(frame: Frame, box: tuple, polygons: list, label: str) -> Frame:
+    if frame is None or not polygons: return frame
+    vis_frame = frame.copy()
+    min_x, min_y, max_x, max_y = map(int, box)
+    for poly in polygons:
+        safe_poly = poly.copy()
+        safe_poly[:, 0] = np.clip(safe_poly[:, 0], 0, frame.shape[1] - 1)
+        safe_poly[:, 1] = np.clip(safe_poly[:, 1], 0, frame.shape[0] - 1)
+        cv2.polylines(vis_frame, [safe_poly.astype(np.int32)], isClosed=True, color=(0, 255, 0), thickness=2)
+    cv2.rectangle(vis_frame, (min_x, min_y), (max_x, max_y), (0, 0, 255), 2)
+    label_y = min_y - 10 if min_y > 20 else max_y + 15
+    cv2.putText(vis_frame, label, (min_x, label_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+    return vis_frame
+
 def create_face_mask(face: Face, frame: Frame) -> np.ndarray:
     """Creates a feathered mask covering the whole face area based on landmarks."""
     if frame is None or not hasattr(frame, "shape") or len(frame.shape) < 2:
