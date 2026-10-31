@@ -12,9 +12,9 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 
 **Includes the complete portable app.** No separate Python, CUDA runtime, FFmpeg or included model installation. Double-click the self-extracting file, choose your hardware launcher and create.
 
-**[See LiveFacer in action](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_website)** · **[Explore all features](https://livefacer.com/why-livefacer/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_features)**
+**[Explore LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_website)** · **[Explore all features](https://livefacer.com/why-livefacer/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_features)**
 
-[![Real LiveFacer 1.8 Windows interface showing live webcam face swap, working eye and eyebrow masks, enhancer controls and face preview](https://livefacer.com/images/image.png)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=product_screenshot)
+[![Actual LiveFacer Windows application interface showing webcam face swap, working eye and eyebrow masks, enhancer controls and live preview](https://livefacer.com/images/image.png)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=product_screenshot)
 
 *Actual LiveFacer desktop interface. Click the screenshot to view the Windows edition.*
 
