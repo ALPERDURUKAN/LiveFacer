@@ -1,4 +1,6 @@
-# LiveFacer 1.8 | Real-Time AI Face Swap for Windows, Webcam, OBS & Video
+<p align="center"><a href="https://livefacer.com/"><img src="https://livefacer.com/images/brand/livefacer-logo.webp" width="86" alt="LiveFacer blue face swap logo"></a></p>
+
+# LiveFacer | Real-Time AI Face Swap for Windows, Webcam, OBS & Video
 
 **The #1 Real-Time Face Swap App for Creators.**
 
@@ -8,23 +10,19 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 
 **30 FPS, Near-Native Performance · 100% Offline & Private · Built-in Virtual Camera**
 
-### [Get the Ready-to-Run Windows Edition → From $10/month](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_buy)
+### [Get the Ready-to-Run Windows Edition → From $10/month](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=hero_buy)
 
 **Includes the complete portable app.** No separate Python, CUDA runtime, FFmpeg or included model installation. Double-click the self-extracting file, choose your hardware launcher and create.
 
-**[Explore LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_website)** · **[Explore all features](https://livefacer.com/why-livefacer/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_features)**
+**[Explore LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=hero_website)** · **[Explore all features](https://livefacer.com/why-livefacer/?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=hero_features)**
 
-[![LiveFacer 1.8 promotional visual featuring the real application controls, AI-generated portrait, zero setup, virtual camera and natural eye expressions](https://livefacer.com/images/marketing/livefacer-18-hero.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_visual)
+[![LiveFacer face swap app with realistic AI face examples, eye and eyebrow masks, virtual webcam, and ready-to-run Windows edition](https://livefacer.com/images/brand/livefacer-banner.webp)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=hero_visual)
 
-*Real LiveFacer 1.8 interface with an illustrative AI-generated face sample. Click to get the Windows edition.*
+*LiveFacer product overview. Select the banner to get the ready-to-run Windows edition.*
 
 ## Why Thousands of Creators Choose LiveFacer
 
 **Your face swap should look like you are really there, not like a static mask.**
-
-[![LiveFacer 1.8 features: natural eyes, expressive eyebrows, one-click Virtual Camera, adjustable face enhancement, offline GFPGAN and a portable Windows installer](https://livefacer.com/images/marketing/livefacer-18-benefits.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=benefits_visual)
-
-
 
 - **Your eyes stay yours.** Working **Eyes Mask** preserves your gaze, natural eye movements and blinks.
 - **Your expressions stay real.** **Eyebrows Mask** preserves raised brows, frowns and forehead expressions.
@@ -34,7 +32,7 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 - **One file, zero setup.** The self-extracting Windows edition includes the runtime, FFmpeg and bundled models.
 - **Lightweight and portable.** A streamlined **CustomTkinter** interface runs from a folder or external drive, with NVIDIA, AMD, Intel and CPU launchers.
 
-**[Get all these features in the portable Windows edition →](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=benefits_buy)**
+**[Get all these features in the portable Windows edition →](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=benefits_buy)**
 
 ## Everything you need to create
 
@@ -47,15 +45,11 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 | **Natural face restoration** | GFPGAN, optional GPEN-512 / GPEN-256, adjustable intensity and feathered blending |
 | **More realistic expressions** | Eyes Mask, Eyebrows Mask and an adjustable 12-point Mouth Mask |
 
-[**Explore webcam & Virtual Camera →**](https://livefacer.com/real-time-webcam-face-swap/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18) · [**Explore video face swap →**](https://livefacer.com/ai-video-face-swap/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18)
+[**Explore webcam & Virtual Camera →**](https://livefacer.com/real-time-webcam-face-swap/?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen) · [**Explore video face swap →**](https://livefacer.com/ai-video-face-swap/?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen)
 
 ## Get LiveFacer for Windows
 
 **Skip the installation work. Get straight to creating.**
-
-[![Three steps to use LiveFacer 1.8: download and extract, choose your face, then go live through a virtual camera or export a video](https://livefacer.com/images/marketing/livefacer-18-steps.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=setup_visual)
-
-
 
 1. **Purchase and download** the portable edition (approximately **4 GB**).
 2. **Double-click to extract** the self-extracting `.exe`. Allow approximately **10 GB** of free disk space.
@@ -72,11 +66,11 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 
 **Subscribe for updates. Keep your software.** Your downloaded version continues to work even if you cancel. An active subscription provides access to new releases and priority support.
 
-### [Get LiveFacer on Gumroad →](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=pricing_buy)
+### [Get LiveFacer on Gumroad →](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=pricing_buy)
 
 *Choose your billing period on Gumroad. The product page has the current purchase and refund terms.*
 
-## What's new in LiveFacer 1.8
+## Recent improvements
 
 **Faster video rendering. Smoother face blending. More control over the final look.**
 
@@ -88,7 +82,7 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 - **Your speed, your settings:** Face detection size selector at 160, 320 or 640.
 - **More creator tools:** Random AI Face, improved webcam detection, hover tooltips and support for non-English file paths.
 
-The Gumroad listing includes **LiveFacer 1.5b and the 1.8 alpha-testing release**.
+Check the [Gumroad product page](https://durq.gumroad.com/l/livefacer) for current downloadable builds and updates.
 
 ## System requirements
 
@@ -134,7 +128,7 @@ python run.py --execution-provider cuda
 
 The example is for compatible NVIDIA environments. Follow [the detailed source instructions](code/README.md) and [model setup instructions](code/models/instructions.txt).
 
-**Want the ready-to-run package instead?** [Get the portable Windows edition](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=source_buy).
+**Want the ready-to-run package instead?** [Get the portable Windows edition](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=source_buy).
 
 </details>
 
@@ -151,8 +145,8 @@ LiveFacer builds on community software including [Deep-Live-Cam](https://github.
 
 ### Ready to create?
 
-**[Get LiveFacer for Windows → From $10/month](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=final_buy)**
+**[Get LiveFacer for Windows → From $10/month](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=final_buy)**
 
-[LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=footer_site) · [Why LiveFacer](https://livefacer.com/why-livefacer/) · [Webcam guide](https://livefacer.com/real-time-webcam-face-swap/) · [Video guide](https://livefacer.com/ai-video-face-swap/)
+[LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer_evergreen&utm_content=footer_site) · [Why LiveFacer](https://livefacer.com/why-livefacer/) · [Webcam guide](https://livefacer.com/real-time-webcam-face-swap/) · [Video guide](https://livefacer.com/ai-video-face-swap/)
 
 If you enjoy LiveFacer, **star this repository** to help more creators discover it.
