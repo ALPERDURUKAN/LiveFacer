@@ -1,6 +1,6 @@
 # LiveFacer: Real-Time AI Face Swap for Webcam, OBS & Video
 
-**The #1 Real-Time Face Swap App for Creators.** LiveFacer is a GPU-accelerated, portable **Windows 10/11 face swap application** for real-time webcam previews, OBS virtual camera workflows, photos and videos. Choose a face, refine the result, and create without manually installing Python or AI dependencies in the prebuilt edition.
+**The #1 Real-Time Face Swap App for Creators.** Swap faces without losing your natural eye movements, blinks or expressions. Start LiveFacer's built-in Virtual Camera with one click, adjust facial detail to your taste, or create face-swap videos. **One portable Windows download. Zero setup.**
 
 **30 FPS, Near-Native Performance · 100% Offline & Private · One-click Portable .exe**
 
@@ -9,6 +9,20 @@
 ![Real LiveFacer desktop interface with face selection, webcam preview and masks](https://livefacer.com/images/image.png)
 
 > **Free source or ready-to-run?** The source-based workflow is available in this repository. The **paid self-extracting edition** bundles Python, the CUDA runtime, FFmpeg and included AI models. Double-click to extract, then start with a launcher that matches your hardware. Subscriptions provide new builds and priority support; your last downloaded version remains usable after cancellation.
+
+## Why thousands of creators choose LiveFacer
+
+**The face changes. Your expression stays.**
+
+- **Real eyes, natural blinks:** The working **Eyes Mask** preserves original eye movement, gaze direction and blinks.
+- **Expressive eyebrows:** **Eyebrows Mask** keeps raised brows, frowns and forehead expressions during face swaps.
+- **Built-in Virtual Camera:** Start virtual webcam output right from the LiveFacer interface. Use it in OBS and supported video-call or streaming apps through a compatible virtual camera driver.
+- **Beautiful detail, not plastic skin:** Choose exactly how much face enhancement you want with a **0–100% Enhancer Intensity** slider.
+- **Face enhancement ready offline:** Bundled **GFPGAN** works from first launch, with no separate initial model download.
+- **One file, zero setup:** The portable self-extracting Windows edition includes the Python runtime, CUDA runtime, FFmpeg and included models. Just double-click to extract.
+- **Lightweight and portable:** A streamlined desktop interface built for quick startup. Run from a folder or external drive.
+
+**[Get LiveFacer for Windows from $10/month →](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=v18&utm_content=benefits)**
 
 ## What's new in LiveFacer 1.8
 
@@ -29,8 +43,8 @@
 
 ## What LiveFacer can do
 
-- **Real-time webcam face swap:** Live preview, FPS overlay, custom resolution and mirror mode.
-- **OBS and virtual camera:** Output through a compatible driver, such as **OBS Virtual Camera**, for streaming and supported video-call applications.
+- **Real-time webcam face swap:** Live preview, FPS overlay, working eye and eyebrow masks, custom resolution and mirror mode.
+- **Built-in Virtual Camera:** Start virtual webcam output with one click inside LiveFacer. Use a compatible driver, such as **OBS Virtual Camera**, for streaming and supported video-call apps.
 - **Image and video face swap:** Keep audio and FPS, control output quality, and render with GPU encoding when available.
 - **Multiple faces:** Many Faces mode and Map Faces, including distinct source faces for different people.
 - **More natural expressions:** Mouth Mask, Eyes Mask and Eyebrows Mask preserve original lip movement and gaze.
@@ -96,4 +110,4 @@ The project builds on open-source software and third-party AI models, which can 
 
 ---
 
-[**LiveFacer.com**](https://livefacer.com/) · [**Get LiveFacer**](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=v18) · [**Webcam face swap guide**](https://livefacer.com/real-time-webcam-face-swap/) · [**Video face swap guide**](https://livefacer.com/ai-video-face-swap/) · [**Deep-Live-Cam alternative**](https://livefacer.com/deep-live-cam-alternative/)
+[**LiveFacer.com**](https://livefacer.com/) · [**Get LiveFacer**](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=v18) · [**Webcam face swap guide**](https://livefacer.com/real-time-webcam-face-swap/) · [**Video face swap guide**](https://livefacer.com/ai-video-face-swap/) · [**Why LiveFacer**](https://livefacer.com/why-livefacer/)
