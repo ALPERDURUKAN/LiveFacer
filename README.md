@@ -14,13 +14,17 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 
 **[Explore LiveFacer.com](https://livefacer.com/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_website)** · **[Explore all features](https://livefacer.com/why-livefacer/?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_features)**
 
-[![Actual LiveFacer Windows application interface showing webcam face swap, working eye and eyebrow masks, enhancer controls and live preview](https://livefacer.com/images/image.png)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=product_screenshot)
+[![LiveFacer 1.8 promotional visual featuring the real application controls, AI-generated portrait, zero setup, virtual camera and natural eye expressions](https://livefacer.com/images/marketing/livefacer-18-hero.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=hero_visual)
 
-*Actual LiveFacer desktop interface. Click the screenshot to view the Windows edition.*
+*Real LiveFacer 1.8 interface with an illustrative AI-generated face sample. Click to get the Windows edition.*
 
 ## Why Thousands of Creators Choose LiveFacer
 
 **Your face swap should look like you are really there, not like a static mask.**
+
+[![LiveFacer 1.8 features: natural eyes, expressive eyebrows, one-click Virtual Camera, adjustable face enhancement, offline GFPGAN and a portable Windows installer](https://livefacer.com/images/marketing/livefacer-18-benefits.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=benefits_visual)
+
+
 
 - **Your eyes stay yours.** Working **Eyes Mask** preserves your gaze, natural eye movements and blinks.
 - **Your expressions stay real.** **Eyebrows Mask** preserves raised brows, frowns and forehead expressions.
@@ -48,6 +52,10 @@ Keep your **natural eye movements, blinks and facial expressions** while you swa
 ## Get LiveFacer for Windows
 
 **Skip the installation work. Get straight to creating.**
+
+[![Three steps to use LiveFacer 1.8: download and extract, choose your face, then go live through a virtual camera or export a video](https://livefacer.com/images/marketing/livefacer-18-steps.jpg)](https://durq.gumroad.com/l/livefacer?utm_source=github&utm_medium=readme&utm_campaign=livefacer18&utm_content=setup_visual)
+
+
 
 1. **Purchase and download** the portable edition (approximately **4 GB**).
 2. **Double-click to extract** the self-extracting `.exe`. Allow approximately **10 GB** of free disk space.
